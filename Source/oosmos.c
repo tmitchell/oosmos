@@ -948,6 +948,26 @@ extern void oosmos_RunStateMachines(void)
 
     return (uint32_t) TimerObj.read_us();
   }
+#elif defined(SPARK_PLATFORM) || defined(PARTICLE_PLATFORM)
+  extern void oosmos_DelayUS(int US)
+  {
+    delayMicroseconds(US);
+  }
+
+  extern void oosmos_DelayMS(int MS)
+  {
+    delay(MS);
+  }
+
+  extern void oosmos_DelaySeconds(int Seconds)
+  {
+    delay(Seconds * 1000);
+  }
+
+  static uint32_t GetFreeRunningMicroseconds(void)
+  {
+    return micros();
+  }
 #endif
 
 extern void oosmos_TimeoutInSeconds(oosmos_sTimeout * pTimeout, uint32_t Seconds)

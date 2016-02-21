@@ -75,6 +75,12 @@
 #elif defined(__MBED__)
   #include "mbed.h"
   #define oosmos_EndProgram(Code) OOSMOS_EndProgram(Code)
+#elif defined(SPARK_PLATFORM)
+  #include "spark_wiring_ticks.h"
+  #define oosmos_EndProgram(Code) while(1)continue
+#elif defined(PARTICLE_PLATFORM)
+  #include "particle_wiring_ticks.h"
+  #define oosmos_EndProgram(Code) while(1)continue
 #else
   #define oosmos_EndProgram(Code) OOSMOS_EndProgram(Code)
 #endif
@@ -115,6 +121,10 @@ struct OOSMOS_sQueueTag
     #define oosmos_DebugPrint OOSMOS_ArduinoPrintf
     #define oosmos_DebugCode(x) x
     extern void OOSMOS_ArduinoPrintf(const char * pFormat, ...);
+  #elif defined(SPARK_PLATFORM) || defined(PARTICLE_PLATFORM)
+    #include "service_debug.h"
+    #define oosmos_DebugPrint(fmt, ...) log_print_direct_(LOG_LEVEL, 0, fmt, ##__VA_ARGS__)
+    #define oosmos_DebugCode(x) x
   #else
     #define oosmos_DebugPrint printf
     #define oosmos_DebugCode(x) x
